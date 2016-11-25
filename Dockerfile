@@ -8,8 +8,8 @@ MAINTAINER Fwedoz "fwedoz@gmail.com"
 
 # Definition des constantes
 ENV password_mysql="mysqlPass"
-ENV login_ssh="fwedoz"
-ENV password_ssh="fwedozPass"
+ENV login_ssh="sshLogin"
+ENV password_ssh="sshPass"
 
 # Mise a jour des depots
 RUN (apt-get update && apt-get upgrade -y -q && apt-get -y -q autoclean && apt-get -y -q autoremove)
@@ -71,26 +71,34 @@ EXPOSE 22 80 10081 10082
 VOLUME ["/home/${login_ssh}", "/var/www/html"]
 
 # Ajout des services au bashrc pour lancement au demarrage
-RUN echo "service ssh start" >>  /root/.bashrc
-RUN echo "service zend-server start" >>  /root/.bashrc
-RUN echo "service mysql start" >>  /root/.bashrc
+RUN echo "service ssh start" > /home/${login_ssh}/services.sh
+RUN echo "service zend-server start" >> /home/${login_ssh}/services.sh
+RUN echo "service mysql start" >> /home/${login_ssh}/services.sh
+RUN chmod -f 755 /home/${login_ssh}/services.sh
+RUN chown -f ${login_ssh}:${login_ssh} /home/${login_ssh}/services.sh
+
+CMD ["/home/${login_ssh}/services.sh"]
 
 # Ajout des informations d accueil
 RUN echo "echo ''" >>  /root/.bashrc
 RUN echo "echo ''" >>  /root/.bashrc
 RUN echo "echo ''" >>  /root/.bashrc
 RUN echo "echo '###############################################################################'" >>  /root/.bashrc
-RUN echo "echo '##                                                                           '" >>  /root/.bashrc
-RUN echo "echo '##                   Bienvenue sur le container de Base ZS9                  '" >>  /root/.bashrc
-RUN echo "echo '##                                                                           '" >>  /root/.bashrc
-RUN echo "echo '##                                                                           '" >>  /root/.bashrc
-RUN echo "echo '##    * Page d accueil du serveur : http://172.17.0.2                        '" >>  /root/.bashrc
-RUN echo "echo '##                                                                           '" >>  /root/.bashrc
-RUN echo "echo '##    * Connexion SSH :                                                      '" >>  /root/.bashrc
-RUN echo "echo '##      - host => 172.17.0.2                                                 '" >>  /root/.bashrc
-RUN echo "echo '##      - login => ${login_ssh}                                              '" >>  /root/.bashrc
-RUN echo "echo '##      - password => ${password_ssh}                                        '" >>  /root/.bashrc
-RUN echo "echo '##                                                                           '" >>  /root/.bashrc
+RUN echo "echo '##                                                                             '" >>  /root/.bashrc
+RUN echo "echo '##                   Bienvenue sur le container de Base ZS9                    '" >>  /root/.bashrc
+RUN echo "echo '##                                                                             '" >>  /root/.bashrc
+RUN echo "echo '##                                                                             '" >>  /root/.bashrc
+RUN echo "echo '##    * Page d accueil du serveur : http://172.17.0.2                          '" >>  /root/.bashrc
+RUN echo "echo '##                                                                             '" >>  /root/.bashrc
+RUN echo "echo '##    * Connexion SSH :                                                        '" >>  /root/.bashrc
+RUN echo "echo '##      - host => 172.17.0.2                                                   '" >>  /root/.bashrc
+RUN echo "echo '##      - login => ${login_ssh}                                                '" >>  /root/.bashrc
+RUN echo "echo '##      - password => ${password_ssh}                                          '" >>  /root/.bashrc
+RUN echo "echo '##                                                                             '" >>  /root/.bashrc
+RUN echo "echo '##    * Connexion MySQL :                                                      '" >>  /root/.bashrc
+RUN echo "echo '##      - login => root                                                        '" >>  /root/.bashrc
+RUN echo "echo '##      - password => ${password_mysql}                                        '" >>  /root/.bashrc
+RUN echo "echo '##                                                                             '" >>  /root/.bashrc
 RUN echo "echo '###############################################################################'" >>  /root/.bashrc
 RUN echo "echo ''" >>  /root/.bashrc
 RUN echo "echo ''" >>  /root/.bashrc
