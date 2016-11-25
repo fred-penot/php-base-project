@@ -7,9 +7,9 @@ FROM     ubuntu:yakkety
 MAINTAINER Fwedoz "fwedoz@gmail.com"
 
 # Definition des constantes
-ENV password_mysql="mysqlPass"
-ENV login_ssh="sshLogin"
-ENV password_ssh="sshPass"
+ENV password_mysql="docker"
+ENV login_ssh="docker"
+ENV password_ssh="docker"
 
 # Mise a jour des depots
 RUN (apt-get update && apt-get upgrade -y -q && apt-get -y -q autoclean && apt-get -y -q autoremove)
@@ -39,30 +39,15 @@ RUN cd /var/www/html/phpmyadmin/themes; unzip metro-2.5.zip
 RUN cd /var/www/html/phpmyadmin/themes; rm -f metro-2.5.zip
 
 # Modification de la page d accueil du serveur
-RUN echo "<html>" >  /var/www/html/index.html
-RUN echo "  <head>" >>  /var/www/html/index.html
-RUN echo "    <title>Accueil</title>" >>  /var/www/html/index.html
-RUN echo "  <head>" >>  /var/www/html/index.html
-RUN echo "  <body>" >>  /var/www/html/index.html
-RUN echo "    <ul>" >>  /var/www/html/index.html
-RUN echo "      <li>" >>  /var/www/html/index.html
-RUN echo "        <a href="#" onclick="javascript:event.target.port=10081" target="_blank">Zend Server</a>" >>  /var/www/html/index.html
-RUN echo "      </li>" >>  /var/www/html/index.html
-RUN echo "      <li>" >>  /var/www/html/index.html
-RUN echo "        <a href="/phpmyadmin" target="_blank">PhpMyAdmin</a>" >>  /var/www/html/index.html
-RUN echo "      </li>" >>  /var/www/html/index.html
-RUN echo "    </ul>" >>  /var/www/html/index.html
-RUN echo "  </body>" >>  /var/www/html/index.html
-RUN echo "</html>" >>  /var/www/html/index.html
+RUN rm -f /var/www/html/index.html
+COPY index.html /var/www/html/index.html
+RUN chmod -f 755 /home/${login_ssh}/services.sh
 
 # Ajout utilisateur "${login_ssh}"
 RUN adduser --quiet --disabled-password --shell /bin/bash --home /home/${login_ssh} --gecos "User" ${login_ssh}
+
 # Modification du mot de passe pour "${login_ssh}"
 RUN echo "${login_ssh}:${password_ssh}" | chpasswd
-
-# Ajout d'un fichier test pour le partage
-RUN echo "Hello" >  /home/${login_ssh}/test.txt
-RUN chown -f ${login_ssh}:${login_ssh} /home/${login_ssh}/test.txt
 
 # Ports
 EXPOSE 22 80 10081 10082
@@ -71,13 +56,14 @@ EXPOSE 22 80 10081 10082
 VOLUME ["/home/${login_ssh}", "/var/www/html"]
 
 # Ajout des services au bashrc pour lancement au demarrage
-RUN echo "service ssh start" > /home/${login_ssh}/services.sh
-RUN echo "service zend-server start" >> /home/${login_ssh}/services.sh
-RUN echo "service mysql start" >> /home/${login_ssh}/services.sh
-RUN chmod -f 755 /home/${login_ssh}/services.sh
-RUN chown -f ${login_ssh}:${login_ssh} /home/${login_ssh}/services.sh
+RUN mkdir /home/${login_ssh}/scripts
+COPY services.sh /home/${login_ssh}/scripts/services.sh
+RUN chmod -Rf 755 /home/${login_ssh}/scripts
+RUN chown -R ${login_ssh}:${login_ssh} /home/${login_ssh}/scripts
 
-CMD ["/home/${login_ssh}/services.sh"]
+ENTRYPOINT /home/${login_ssh}/scripts/services.sh
+
+WORKDIR /home/${login_ssh}
 
 # Ajout des informations d accueil
 RUN echo "echo ''" >>  /root/.bashrc
