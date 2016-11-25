@@ -56,12 +56,10 @@ EXPOSE 22 80 10081 10082
 VOLUME ["/home/${login_ssh}", "/var/www/html"]
 
 # Ajout des services au bashrc pour lancement au demarrage
-RUN mkdir /home/${login_ssh}/scripts
-COPY services.sh /home/${login_ssh}/scripts/services.sh
-RUN chmod -Rf 755 /home/${login_ssh}/scripts
-RUN chown -R ${login_ssh}:${login_ssh} /home/${login_ssh}/scripts
+COPY services.sh /root/services.sh
+RUN chmod -f 755 /root/services.sh
 
-ENTRYPOINT /home/${login_ssh}/scripts/services.sh
+ENTRYPOINT /root/services.sh
 
 WORKDIR /home/${login_ssh}
 
