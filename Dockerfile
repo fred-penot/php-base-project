@@ -8,8 +8,8 @@ MAINTAINER Fwedoz "fwedoz@gmail.com"
 
 # Definition des constantes
 ENV password_mysql="mysqlPass"
-ENV login_ssh="sshLogin"
-ENV password_ssh="sshPass"
+ENV login_ssh="docker"
+ENV password_ssh="docker"
 
 # Mise a jour des depots
 RUN (apt-get update && apt-get upgrade -y -q && apt-get -y -q autoclean && apt-get -y -q autoremove)
@@ -46,7 +46,7 @@ RUN echo "  <head>" >>  /var/www/html/index.html
 RUN echo "  <body>" >>  /var/www/html/index.html
 RUN echo "    <ul>" >>  /var/www/html/index.html
 RUN echo "      <li>" >>  /var/www/html/index.html
-RUN echo "        <a href="#" onclick="javascript:event.target.port=10081" target="_blank">Zend Server</a>" >>  /var/www/html/index.html
+RUN echo '        <a href="#" onclick="javascript:event.target.port=10081" target="_blank">Zend Server</a>' >>  /var/www/html/index.html
 RUN echo "      </li>" >>  /var/www/html/index.html
 RUN echo "      <li>" >>  /var/www/html/index.html
 RUN echo "        <a href="/phpmyadmin" target="_blank">PhpMyAdmin</a>" >>  /var/www/html/index.html
@@ -57,6 +57,7 @@ RUN echo "</html>" >>  /var/www/html/index.html
 
 # Ajout utilisateur "${login_ssh}"
 RUN adduser --quiet --disabled-password --shell /bin/bash --home /home/${login_ssh} --gecos "User" ${login_ssh}
+
 # Modification du mot de passe pour "${login_ssh}"
 RUN echo "${login_ssh}:${password_ssh}" | chpasswd
 
