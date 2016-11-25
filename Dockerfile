@@ -41,7 +41,7 @@ RUN cd /var/www/html/phpmyadmin/themes; rm -f metro-2.5.zip
 # Modification de la page d accueil du serveur
 RUN rm -f /var/www/html/index.html
 COPY index.html /var/www/html/index.html
-RUN chmod -f 755 /home/${login_ssh}/services.sh
+RUN chmod -f 755 /var/www/html/index.html
 
 # Ajout utilisateur "${login_ssh}"
 RUN adduser --quiet --disabled-password --shell /bin/bash --home /home/${login_ssh} --gecos "User" ${login_ssh}
