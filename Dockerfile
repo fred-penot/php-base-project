@@ -55,32 +55,9 @@ EXPOSE 22 80 10081 10082
 # Point de montage
 VOLUME ["/home/${login_ssh}", "/var/www/html"]
 
-# Ajout des services au bashrc pour lancement au demarrage
-RUN echo "service ssh start" >>  /root/.bashrc
-RUN echo "service zend-server start" >>  /root/.bashrc
-RUN echo "service mysql start" >>  /root/.bashrc
+# script de lancement des services et d affichage de l'accueil
+COPY services.sh /root/services.sh
+RUN chmod -f 755 /root/services.sh
 
-# Ajout des informations d accueil
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo '###############################################################################'" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##                   Bienvenue sur le container de Base ZS9                    '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##    * Page d accueil du serveur : http://172.17.0.2                          '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##    * Connexion SSH :                                                        '" >>  /root/.bashrc
-RUN echo "echo '##      - host => 172.17.0.2                                                   '" >>  /root/.bashrc
-RUN echo "echo '##      - login => ${login_ssh}                                                '" >>  /root/.bashrc
-RUN echo "echo '##      - password => ${password_ssh}                                          '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##    * Connexion MySQL :                                                      '" >>  /root/.bashrc
-RUN echo "echo '##      - login => root                                                        '" >>  /root/.bashrc
-RUN echo "echo '##      - password => ${password_mysql}                                        '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '###############################################################################'" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
+# Ajout du script services.sh au demarrage
+RUN echo "sh /root/services.sh" >> /root/.bashrc
