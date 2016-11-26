@@ -52,9 +52,6 @@ RUN echo "${login_ssh}:${password_ssh}" | chpasswd
 # Ports
 EXPOSE 22 80 10081 10082
 
-# Point de montage
-VOLUME ["/home/${login_ssh}", "/var/www/html"]
-
 # script de lancement des services et d affichage de l'accueil
 COPY services.sh /root/services.sh
 RUN chmod -f 755 /root/services.sh
