@@ -53,7 +53,7 @@ RUN echo "${login_ssh}:${password_ssh}" | chpasswd
 EXPOSE 22 80 10081 10082
 
 # Point de montage
-VOLUME ["/home/${login_ssh}", "/var/www/html"]
+VOLUME ["/var/www/html"]
 
 # Ajout des services au bashrc pour lancement au demarrage
 COPY services.sh /root/services.sh
@@ -61,29 +61,4 @@ RUN chmod -f 755 /root/services.sh
 
 ENTRYPOINT /root/services.sh
 
-WORKDIR /home/${login_ssh}
-
-# Ajout des informations d accueil
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo '###############################################################################'" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##                   Bienvenue sur le container de Base ZS9                    '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##    * Page d accueil du serveur : http://172.17.0.2                          '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##    * Connexion SSH :                                                        '" >>  /root/.bashrc
-RUN echo "echo '##      - host => 172.17.0.2                                                   '" >>  /root/.bashrc
-RUN echo "echo '##      - login => ${login_ssh}                                                '" >>  /root/.bashrc
-RUN echo "echo '##      - password => ${password_ssh}                                          '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '##    * Connexion MySQL :                                                      '" >>  /root/.bashrc
-RUN echo "echo '##      - login => root                                                        '" >>  /root/.bashrc
-RUN echo "echo '##      - password => ${password_mysql}                                        '" >>  /root/.bashrc
-RUN echo "echo '##                                                                             '" >>  /root/.bashrc
-RUN echo "echo '###############################################################################'" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
-RUN echo "echo ''" >>  /root/.bashrc
+WORKDIR /var/www/html
