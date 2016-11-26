@@ -56,10 +56,9 @@ EXPOSE 22 80 10081 10082
 VOLUME ["/home/${login_ssh}", "/var/www/html"]
 
 # Ajout des services au bashrc pour lancement au demarrage
-COPY services.sh /root/services.sh
-RUN chmod -f 755 /root/services.sh
-
-CMD ["/root/services.sh"]
+RUN echo "service ssh start" >>  /root/.bashrc
+RUN echo "service zend-server start" >>  /root/.bashrc
+RUN echo "service mysql start" >>  /root/.bashrc
 
 # Ajout des informations d accueil
 RUN echo "echo ''" >>  /root/.bashrc
