@@ -3,7 +3,7 @@
 # VERSION               0.0.1
 #
 
-FROM     ubuntu:yakkety
+FROM     ubuntu:trusty
 MAINTAINER Fwedoz "fwedoz@gmail.com"
 
 # Definition des constantes
