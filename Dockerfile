@@ -25,9 +25,9 @@ RUN apt-get update
 RUN apt-get install -y -q zend-server-php-7.0
 
 # Installation de MySQL
-RUN echo "mysql-server-5.7 mysql-server/root_password password ${password_mysql}" | debconf-set-selections
-RUN echo "mysql-server-5.7 mysql-server/root_password_again password ${password_mysql}" | debconf-set-selections
-RUN apt-get -y -q install mysql-server-5.7
+RUN echo "mysql-server-5.5 mysql-server/root_password password ${password_mysql}" | debconf-set-selections
+RUN echo "mysql-server-5.5 mysql-server/root_password_again password ${password_mysql}" | debconf-set-selections
+RUN apt-get -y -q install mysql-server-5.5
 
 # Telechargement de phpMyAdmin
 RUN cd /var/www/html; wget https://files.phpmyadmin.net/phpMyAdmin/4.6.4/phpMyAdmin-4.6.4-all-languages.zip
